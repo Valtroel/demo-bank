@@ -27,6 +27,8 @@ public interface AccountRepository extends JpaRepository<AccountModel, Long> {
 
     Optional<AccountModel> findById(@NonNull Long id);
 
+    Optional<AccountModel> findByUser(AccountModel.UserInfo user);
+
     @Modifying
     @Transactional
     @Query(value = "UPDATE public.accounts SET amount=:newAmount where id=:id", nativeQuery = true)

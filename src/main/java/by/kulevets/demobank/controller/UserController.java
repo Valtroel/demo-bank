@@ -2,6 +2,8 @@ package by.kulevets.demobank.controller;
 
 import by.kulevets.demobank.entity.model.AccountModel;
 import by.kulevets.demobank.entity.pojo.UserPojo;
+import by.kulevets.demobank.repository.AccountRepository;
+import by.kulevets.demobank.repository.UserRepository;
 import by.kulevets.demobank.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +36,16 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final AccountService accountService;
 
-    public UserController(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, AccountService accountService) {
+    private final UserRepository userRepository;
+
+    private final AccountRepository accountRepository;
+
+    public UserController(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, AccountService accountService, UserRepository userRepository, AccountRepository accountRepository) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.accountService = accountService;
+        this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @GetMapping(
@@ -55,7 +63,7 @@ public class UserController {
 
     @GetMapping("/account")
     public AccountModel account(@RequestParam Long userId){
-        return null;
+        return accountRepository.findByUser(new AccountModel.UserInfo(userId,userRepository.findById(userId).get().getUserName() )).get();
     }
 
     @PostMapping("/withdraw")
