@@ -1,4 +1,7 @@
-FROM ubuntu:latest
-LABEL authors="User"
+FROM openjdk:17-alpine
+WORKDIR /demo-bank
+CMD ["./gradlew", "clean", "bootJar"]
+COPY build/libs/*.jar demo-bank-0.0.1-SNAPSHOT.jar
 
-ENTRYPOINT ["top", "-b"]
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "demo-bank-0.0.1-SNAPSHOT.jar"]

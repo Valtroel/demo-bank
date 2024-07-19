@@ -6,13 +6,13 @@ import by.kulevets.demobank.entity.model.UserModel;
 import by.kulevets.demobank.entity.enumeration.UserRole;
 import by.kulevets.demobank.repository.AccountRepository;
 import by.kulevets.demobank.repository.UserRepository;
-import by.kulevets.demobank.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 
@@ -20,7 +20,11 @@ import java.math.BigDecimal;
 public class PrepareDbConfig {
 
     private static final Logger log = LoggerFactory.getLogger(PrepareDbConfig.class);
+    private final PasswordEncoder passwordEncoder;
 
+    public PrepareDbConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Bean
     CommandLineRunner initDbData(UserRepository userRepository, AccountRepository accountRepository) {
@@ -31,7 +35,7 @@ public class PrepareDbConfig {
                                 null,
                                 UserRole.ADMIN,
                                 "admin",
-                                PasswordUtil.hashPassword("admin")
+                                passwordEncoder.encode("admin")
                         )
                 );
                 UserModel user1 = userRepository.save(
@@ -39,7 +43,7 @@ public class PrepareDbConfig {
                                 null,
                                 UserRole.USER,
                                 "user1",
-                                PasswordUtil.hashPassword("user1")
+                                passwordEncoder.encode("user1")
                         )
                 );
                 UserModel user2 = userRepository.save(
@@ -47,7 +51,7 @@ public class PrepareDbConfig {
                                 null,
                                 UserRole.USER,
                                 "user2",
-                                PasswordUtil.hashPassword("user2")
+                                passwordEncoder.encode("user2")
                         )
                 );
                 log.info("Preparing admin: " + admin);
@@ -58,7 +62,7 @@ public class PrepareDbConfig {
                         .save(
                                 new AccountModel(
                                         null,
-                                        user1.getId(),
+                                        user1,
                                         AccountStatus.ACTIVE,
                                         new BigDecimal(0)
                                 )
@@ -69,7 +73,7 @@ public class PrepareDbConfig {
                         .save(
                                 new AccountModel(
                                         null,
-                                        user2.getId(),
+                                        user2,
                                         AccountStatus.ACTIVE,
                                         new BigDecimal(0)
                                 )
@@ -85,7 +89,7 @@ public class PrepareDbConfig {
                             .save(
                                     new AccountModel(
                                             null,
-                                            user1.getId(),
+                                            user1,
                                             AccountStatus.ACTIVE,
                                             new BigDecimal(0)
                                     )
@@ -98,7 +102,7 @@ public class PrepareDbConfig {
                             .save(
                                     new AccountModel(
                                             null,
-                                            user2.getId(),
+                                            user2,
                                             AccountStatus.ACTIVE,
                                             new BigDecimal(0)
                                     )

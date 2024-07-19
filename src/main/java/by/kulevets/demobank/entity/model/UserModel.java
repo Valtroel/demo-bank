@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class UserModel extends User implements Serializable, UserDetails {
+public class UserModel implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,38 +39,6 @@ public class UserModel extends User implements Serializable, UserDetails {
 
     public UserModel() {
 
-    }
-
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(role);
-    }
-
-    @Override
-    public String getUsername() {
-        return userName;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
     public void setId(Long id) {

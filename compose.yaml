@@ -1,12 +1,25 @@
+version: '3.3'
+
 services:
-  service-db:
-    image: postgres:14.7-alpine
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: chachacha228
+  db:
+    container_name: db
+    image: postgres
     ports:
       - "5432:5432"
-    volumes:
-      - ./infra/db/db_init.sql:/docker-entrypoint-initdb.d/db_init.sql
-      - db-data:/var/lib/postgresql/data
-    restart: unless-stopped
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: xkmjr3m3
+      POSTGRES_DB: bank
+  demo-bank:
+    image: demo-bank-0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: demo-bank
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SERVER_PORT= 8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bank
