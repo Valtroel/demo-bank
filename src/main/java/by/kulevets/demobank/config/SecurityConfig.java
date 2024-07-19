@@ -23,8 +23,15 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disables CSRF protection
-                .cors(withDefaults()); // Enables Basic Authentication
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
+                .authorizeHttpRequests((authorize) -> {
+                    authorize
+                            .requestMatchers("/admin/").hasRole("ADMIN")
+                            .requestMatchers("/user/login").permitAll()
+                            .requestMatchers("/user/*").hasRole("USER");
+
+                });
         return http.build();
     }
 

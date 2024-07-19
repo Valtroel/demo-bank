@@ -1,4 +1,4 @@
-package by.kulevets.demobank.model.enumeration;
+package by.kulevets.demobank.entity.enumeration;
 
 public enum AccountStatus {
     ACTIVE,

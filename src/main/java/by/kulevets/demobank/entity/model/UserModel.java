@@ -1,21 +1,27 @@
-package by.kulevets.demobank.model;
+package by.kulevets.demobank.entity.model;
 
-import by.kulevets.demobank.model.enumeration.UserRole;
+import by.kulevets.demobank.entity.enumeration.UserRole;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class UserModel  implements Serializable {
+public class UserModel extends User implements Serializable, UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @Column(name = "role")
+    @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
     @Column(name = "user_name")
@@ -33,6 +39,38 @@ public class UserModel  implements Serializable {
 
     public UserModel() {
 
+    }
+
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(role);
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setId(Long id) {

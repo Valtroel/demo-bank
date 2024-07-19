@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.flywaydb.flyway' version '10.15.2'
 }
 
 group = 'by.kulevets'
@@ -21,8 +22,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mindrot:jbcrypt:0.4'
-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
+    implementation 'org.flywaydb:flyway-core:10.15.2'
+    //developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -32,3 +34,5 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootRun.dependsOn("flywayMigrate")
